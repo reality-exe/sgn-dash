@@ -18,6 +18,7 @@ export default function EditDialog({ gate }: { gate: Stargate }) {
   const [status, setStatus] = useState<string>(gate.gate_status);
   const [privacy, setPrivacy] = useState<boolean>(gate.public_gate);
   const [open, setOpen] = useState<boolean>(false);
+
   return (
     <Dialog.Root open={open}>
       <Dialog.Trigger>

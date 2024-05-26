@@ -86,10 +86,7 @@ export default function Home() {
           </Button>
         }
         navbar_center={
-          <Text
-            size={"8"}
-            className={`${anquietas.className} hidden lg:block`}
-          >
+          <Text size={"8"} className={`${anquietas.className} hidden lg:block`}>
             We are the Ancients of Resonite
           </Text>
         }
@@ -251,7 +248,7 @@ export default function Home() {
               </ContextMenu.Root>
             ) : (
               <GateItem key={i} gate={gate} />
-            )
+            ),
           )
         )}
       </Flex>
@@ -503,5 +500,3 @@ function UserDropdown() {
     </Popover.Root>
   );
 }
-
-

@@ -14,7 +14,7 @@ import {
 } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
-import { At, Password, User } from "@phosphor-icons/react";
+import { At, DiscordLogo, Password, User } from "@phosphor-icons/react";
 import { Toaster, toast } from "react-hot-toast";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -25,6 +25,13 @@ import {
   OutMode,
 } from "@tsparticles/engine";
 import { ClientResponseError } from "pocketbase";
+import { RiLoginCircleLine } from "react-icons/ri";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
+import { TbBrandDiscord } from "react-icons/tb";
+import { PiDiscordLogo } from "react-icons/pi";
+import { RxDiscordLogo } from "react-icons/rx";
+import { AuthentikAuth } from "@/types/AuthentikAuth";
+import { DiscordAuth } from "@/types/DiscordAuth";
 
 export default function Login() {
   const [init, setInit] = useState(false);
@@ -207,14 +214,33 @@ export default function Login() {
                           e.preventDefault();
                           pb.collection("users")
                             .authWithOAuth2({
+                              provider: "discord",
+                            })
+                            .then((val) => {
+                              let auth: DiscordAuth = val as DiscordAuth;
+                              pb.collection("users").update(auth.record.id, {
+                                discord_id: auth.meta.id,
+                              });
+                              // router.push("/");
+                            });
+                        }}
+                      >
+                        <RxDiscordLogo size={22} /> Continue with Discord
+                      </Button>
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          pb.collection("users")
+                            .authWithOAuth2({
                               provider: "oidc",
                             })
                             .then((val) => {
+                              let auth: AuthentikAuth = val as AuthentikAuth;
                               router.push("/");
                             });
                         }}
                       >
-                        Login with Authentik
+                        <RiLoginCircleLine size={22} /> Continue with Authentik
                       </Button>
                     </Flex>
                   </Tabs.Content>

@@ -35,9 +35,32 @@ export default function AdminSidebar() {
           <Text>SGN Admin</Text>
         </Flex>
         <Box my="3" />
-        <Card asChild>
-          <a href="/admin" className="text-center">Overview</a>
-        </Card>
+
+        <Box
+          asChild
+          style={{
+            backgroundColor: path === "/admin" ? "ButtonFace" : "",
+            borderRadius: 10,
+          }}
+          p="2"
+        >
+          <a href="/admin" className="text-center">
+            Overview
+          </a>
+        </Box>
+
+        <Box
+          asChild
+          style={{
+            backgroundColor: path === "/admin/stargates" ? "ButtonFace" : "",
+            borderRadius: 10,
+          }}
+          p="2"
+        >
+          <a href="/admin/stargates" className="text-center bg-[--primary] ">
+            Stargates
+          </a>
+        </Box>
 
         <Box flexGrow="1" />
         <Button color="gray" highContrast size="2" variant="soft" asChild>

@@ -8,8 +8,8 @@ import { Theme } from "@radix-ui/themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ancients of Resonite | Network Admin",
-  description: "Resonite Stargate Network",
+  title: "SGN-A | Overview",
+  description: "Resonite Stargate Network | Administration Dashboard | Overview",
 };
 
 export default function RootLayout({

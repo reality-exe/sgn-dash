@@ -38,9 +38,10 @@ import { NextFont } from "next/dist/compiled/@next/font";
 import { RecordAuthResponse } from "pocketbase";
 import { User } from "@/types/PocketBase/User";
 import { Stargate } from "@/types/PocketBase/Records/Stargate";
-import { Lock, Unlock } from "react-feather";
-import toast, { Toaster } from "react-hot-toast";
 import EditDialog from "@/components/StargateEditDialog";
+import toast, { Toaster } from "react-hot-toast";
+import StarBg from "@/components/StarBg";
+import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 const anquietas = localFont({ src: "../assets/fonts/anquietas.ttf" });
@@ -81,7 +82,7 @@ export default function Home() {
       </Portal>
       <Navbar
         navbar_start={
-          <Button asChild variant="ghost" size={"4"} color="gray">
+          <Button asChild variant="ghost" size={"4"} color="gray" highContrast>
             <a href="/">Stargate Network</a>
           </Button>
         }
@@ -91,7 +92,7 @@ export default function Home() {
           </Text>
         }
         navbar_end={
-          <Flex gap={"6"}>
+          <Flex gap={"6"} align="center">
             {user ? (
               <UserDropdown />
             ) : (
@@ -248,7 +249,7 @@ export default function Home() {
               </ContextMenu.Root>
             ) : (
               <GateItem key={i} gate={gate} />
-            ),
+            )
           )
         )}
       </Flex>
@@ -396,7 +397,7 @@ function GlyphDisplayDropdown() {
   return (
     <DropdownMenu.Root dir="rtl">
       <DropdownMenu.Trigger>
-        <Button variant="ghost" color="gray" size={"3"}>
+        <Button variant="ghost" color="gray" highContrast size={"3"}>
           Glyph Display
           <DropdownMenu.TriggerIcon />
         </Button>
@@ -449,14 +450,25 @@ function UserDropdown() {
   return (
     <Popover.Root>
       <Popover.Trigger>
-        <Button color="gray" variant="ghost" size={"3"}>
-          Hello, {pb.authStore.model?.username}
+        <Button variant="ghost" highContrast color="gray" asChild>
+          <Flex gap="4">
+            <Avatar
+              src={`https://aor-db.rxserver.net/api/files/users/${pb.authStore.model?.id}/${pb.authStore.model?.avatar}`}
+              fallback={pb.authStore.model?.username.slice(0, 2) ?? "UN"}
+            />
+            {pb.authStore.model?.username}
+          </Flex>
         </Button>
       </Popover.Trigger>
       <Popover.Content size="2" maxWidth="400px">
         <Flex direction={"column"} gap={"4"} px="2">
           <Button variant="ghost" color="gray" asChild>
-            <Flex width={"100%"} asChild>
+            <Flex width={"100%"} justify="start" asChild>
+              <a href="/profile">My Profile</a>
+            </Flex>
+          </Button>
+          <Button variant="ghost" color="gray" asChild>
+            <Flex width={"100%"} justify="start" asChild>
               <a href="/admin">Admin Dashboard</a>
             </Flex>
           </Button>

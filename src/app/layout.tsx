@@ -5,6 +5,7 @@ import "@/global/globals.css";
 import { Portal, Theme } from "@radix-ui/themes";
 import { AppWrapper } from "@/context";
 import { Toaster } from "react-hot-toast";
+import StarBg from "@/components/StarBg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             radius="large"
           >
             {children}
+          <StarBg />
           </Theme>
         </AppWrapper>
       </body>

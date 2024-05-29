@@ -123,7 +123,7 @@ export default function EditDialog({ gate }: { gate: Stargate }) {
                 Session Privacy
               </Text>
               <Select.Root
-                value={gate.public_gate ? "true" : "false"}
+                defaultValue={gate.public_gate ? "true" : "false"}
                 onValueChange={(val) => {
                   setPrivacy(val == "true");
                 }}

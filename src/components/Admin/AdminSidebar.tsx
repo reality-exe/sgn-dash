@@ -1,15 +1,5 @@
 "use client";
-import {
-  Flex,
-  Avatar,
-  Separator,
-  Box,
-  Text,
-  Section,
-  Button,
-  RadioCards,
-  Card,
-} from "@radix-ui/themes";
+import { Flex, Avatar, Separator, Box, Text, Button } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function AdminSidebar() {
@@ -21,7 +11,7 @@ export default function AdminSidebar() {
     <Box
       className="sidebar"
       p="4"
-      style={{ backgroundColor: "Background" }}
+      style={{ backgroundColor: "var(--color-panel-translucent)" }}
       asChild
     >
       <Flex direction="column" gap="2">
@@ -59,6 +49,19 @@ export default function AdminSidebar() {
         >
           <a href="/admin/stargates" className="text-center bg-[--primary] ">
             Stargates
+          </a>
+        </Box>
+
+        <Box
+          asChild
+          style={{
+            backgroundColor: path === "/admin/users" ? "ButtonFace" : "",
+            borderRadius: 10,
+          }}
+          p="2"
+        >
+          <a href="/admin/users" className="text-center bg-[--primary] ">
+            Users
           </a>
         </Box>
 

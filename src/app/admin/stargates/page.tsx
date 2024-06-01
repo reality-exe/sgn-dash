@@ -20,13 +20,21 @@ import { ListResult, RecordAuthResponse } from "pocketbase";
 import { useEffect, useState } from "react";
 import { pb } from "@/services/pocketbase.service";
 import { Stargate } from "@/types/PocketBase/Records/Stargate";
-import { HardDrives, User as UserIco } from "@phosphor-icons/react";
+import {
+  Aperture,
+  Circle,
+  HardDrives,
+  Pencil,
+  User as UserIco,
+} from "@phosphor-icons/react";
+import StargateEditDialog from "@/components/StargateEditDialog";
 
 export default function AdminStargate() {
   const router = useRouter();
   const [init, setInit] = useState<boolean>(false);
   const [user, setUser] = useState<RecordAuthResponse<User>>();
   const [users, setUsers] = useState<User[]>();
+  const [allGates, setAllGates] = useState<Stargate[]>([]);
   const [gates, setGates] = useState<ListResult<Stargate>>();
 
   useEffect(() => {
@@ -34,14 +42,15 @@ export default function AdminStargate() {
       .authRefresh()
       .then((user) => {
         setUser(user);
+
         pb.collection("stargates")
-          .getList(1, 5, { sort: "+updated" })
+          .getFullList()
           .then((sg) => {
-            setGates(sg);
-            pb.collection("users")
-              .getFullList()
-              .then((v) => {
-                setUsers(v);
+            setAllGates(sg);
+            pb.collection("stargates")
+              .getList(1, 5, { sort: "+owner_name" })
+              .then((sg) => {
+                setGates(sg);
                 setInit(true);
               });
           });
@@ -51,9 +60,19 @@ export default function AdminStargate() {
       });
   }, [router]);
 
+  function changeGatePage(page: number) {
+    pb.collection("stargates")
+      .getList(page, 5)
+      .then((gates) => {
+        setGates(gates);
+        console.log(page);
+      });
+  }
+
   const path = usePathname();
   return (
     <Box>
+      {/* Full Size Page */}
       <Box className="hidden lg:block">
         <Box className="flex overflow-hidden">
           <AdminSidebar />
@@ -61,7 +80,10 @@ export default function AdminStargate() {
           <Box className="main overflow-auto w-full justify-center">
             <Box
               width="100%"
-              style={{ backgroundColor: "Background" }}
+              style={{
+                backgroundColor: "var(--color-panel-translucent)",
+                backdropFilter: "blur(64px)",
+              }}
               height="5rem"
               p="4"
               asChild
@@ -76,7 +98,7 @@ export default function AdminStargate() {
                   <Card>
                     <Flex direction="column">
                       <Text align="center" size="6" weight="medium">
-                        Active Stargates - {gates?.totalItems ?? "--"}
+                        Active Stargates - {allGates.length ?? "--"}
                       </Text>
                       <Separator my="4" size="4" />
                       <Flex
@@ -96,8 +118,8 @@ export default function AdminStargate() {
                               Public Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => v.public_gate)
-                                .length ?? "--"}
+                              {allGates.filter((v) => v.public_gate).length ??
+                                "--"}
                             </Text>
                           </Flex>
                         </Box>
@@ -112,8 +134,8 @@ export default function AdminStargate() {
                               Hidden Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => !v.public_gate)
-                                .length ?? "--"}
+                              {allGates.filter((v) => !v.public_gate).length ??
+                                "--"}
                             </Text>
                           </Flex>
                         </Box>
@@ -128,7 +150,7 @@ export default function AdminStargate() {
                               MilkyWay Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => v.gate_code == "M@")
+                              {allGates.filter((v) => v.gate_code == "M@")
                                 .length ?? "--"}
                             </Text>
                           </Flex>
@@ -144,7 +166,7 @@ export default function AdminStargate() {
                               Pegasus Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => v.gate_code == "P@")
+                              {allGates.filter((v) => v.gate_code == "P@")
                                 .length ?? "--"}
                             </Text>
                           </Flex>
@@ -160,7 +182,7 @@ export default function AdminStargate() {
                               Universe Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => v.gate_code == "U@")
+                              {allGates.filter((v) => v.gate_code == "U@")
                                 .length ?? "--"}
                             </Text>
                           </Flex>
@@ -176,7 +198,7 @@ export default function AdminStargate() {
                               Dawn Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter((v) => v.gate_code == "R*")
+                              {allGates.filter((v) => v.gate_code == "R*")
                                 .length ?? "--"}
                             </Text>
                           </Flex>
@@ -192,7 +214,7 @@ export default function AdminStargate() {
                               Other Stargates
                             </Text>
                             <Text size="6" align="center">
-                              {gates?.items.filter(
+                              {allGates.filter(
                                 (v) =>
                                   v.gate_code != "M@" &&
                                   v.gate_code != "P@" &&
@@ -213,16 +235,46 @@ export default function AdminStargate() {
                 <Flex direction="column" justify="center" width="100%">
                   <Card>
                     <Flex direction="column">
-                      <Text align="center" size="6" weight="medium">
-                        Recently Updated Stargates
-                      </Text>
-                      <Separator my="4" size="4" />
+                      <Box asChild px="6" width="100%">
+                        <Flex justify="center" align="center">
+                          <Button
+                            variant="surface"
+                            disabled={gates?.page == 1}
+                            onClick={() => {
+                              let page = gates?.page ?? 1;
+                              let newpage = page - 1;
+                              changeGatePage(newpage);
+                            }}
+                          >
+                            Previous Page
+                          </Button>
+                          <Box flexGrow="1" asChild>
+                            <Text align="center" size="6" weight="medium">
+                              All Stargates
+                            </Text>
+                          </Box>
+                          <Button
+                            variant="surface"
+                            disabled={gates?.page == gates?.totalPages}
+                            onClick={() => {
+                              let page = gates?.page ?? 1;
+                              let newpage = page + 1;
+                              changeGatePage(newpage);
+                            }}
+                          >
+                            Next Page
+                          </Button>
+                        </Flex>
+                      </Box>
+                      <Inset mt="6" side="x">
+                        <Separator size="4" />
+                      </Inset>
                       <Inset clip={"padding-box"} side="x">
-                        <Box maxHeight="15rem" overflowY="scroll">
+                        <Box maxHeight="17rem">
                           <Table.Root>
                             <Table.Header>
                               <Table.Row>
-                                <Table.ColumnHeaderCell />
+                                <Table.ColumnHeaderCell width="5.2rem" />
                                 <Table.ColumnHeaderCell>
                                   Gate Address
                                 </Table.ColumnHeaderCell>
@@ -241,26 +293,38 @@ export default function AdminStargate() {
                                 <Table.ColumnHeaderCell>
                                   Privacy
                                 </Table.ColumnHeaderCell>
+                                <Table.ColumnHeaderCell width="4rem" />
                               </Table.Row>
                             </Table.Header>
 
                             <Table.Body>
                               {gates?.items.map((v, i) => (
                                 <Table.Row key={`${v.gate_address}-${i}`}>
-                                  <Table.RowHeaderCell>
-                                    <Tooltip
-                                      content={
-                                        v.is_headless
-                                          ? "Headless Session"
-                                          : "User Session"
-                                      }
-                                    >
-                                      {v.is_headless ? (
-                                        <HardDrives size="20" />
+                                  <Table.RowHeaderCell width="5.2rem">
+                                    <Flex gap="2">
+                                      <Tooltip
+                                        content={
+                                          v.is_headless
+                                            ? "Headless Session"
+                                            : "User Session"
+                                        }
+                                      >
+                                        {v.is_headless ? (
+                                          <HardDrives size="20" />
+                                        ) : (
+                                          <UserIco size="20" />
+                                        )}
+                                      </Tooltip>
+                                      {v.iris_state ? (
+                                        <Tooltip content="Iris Closed">
+                                          <Aperture size="20" />
+                                        </Tooltip>
                                       ) : (
-                                        <UserIco size="20" />
+                                        <Tooltip content="Iris Open">
+                                          <Circle size="20" />
+                                        </Tooltip>
                                       )}
-                                    </Tooltip>
+                                    </Flex>
                                   </Table.RowHeaderCell>
                                   <Table.Cell>{v.gate_address}</Table.Cell>
                                   <Table.Cell>{v.gate_code}</Table.Cell>
@@ -269,6 +333,9 @@ export default function AdminStargate() {
                                   <Table.Cell>{v.session_name}</Table.Cell>
                                   <Table.Cell>
                                     {v.public_gate ? "Public" : "Hidden"}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    <StargateEditDialog gate={v} icon={true} />
                                   </Table.Cell>
                                 </Table.Row>
                               ))}
@@ -284,7 +351,11 @@ export default function AdminStargate() {
           </Box>
         </Box>
       </Box>
+
+      {/* Medium Sized Page */}
       <Box className="hidden md:block lg:hidden">md</Box>
+
+      {/* Phone Page */}
       <Box className="block md:hidden lg:hidden">sm</Box>
     </Box>
   );
@@ -301,7 +372,7 @@ function UserDropdown() {
               src={`https://aor-db.rxserver.net/api/files/users/${pb.authStore.model?.id}/${pb.authStore.model?.avatar}`}
               fallback={pb.authStore.model?.username.slice(0, 2) ?? "UN"}
             />
-            {pb.authStore.model?.username}
+            <Text>{pb.authStore.model?.username}</Text>
           </Flex>
         </Button>
       </Popover.Trigger>

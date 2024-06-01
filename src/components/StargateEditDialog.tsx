@@ -1,5 +1,6 @@
 import { pb } from "@/services/pocketbase.service";
 import { Stargate } from "@/types/PocketBase/Records/Stargate";
+import { Pencil } from "@phosphor-icons/react";
 import {
   Dialog,
   Button,
@@ -12,7 +13,7 @@ import {
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function EditDialog({ gate }: { gate: Stargate }) {
+export default function EditDialog({ gate, icon }: { gate: Stargate, icon?: boolean }) {
   const [name, setName] = useState<string>(gate.session_name);
   const [owner, setOwner] = useState<string>(gate.owner_name);
   const [status, setStatus] = useState<string>(gate.gate_status);
@@ -31,7 +32,7 @@ export default function EditDialog({ gate }: { gate: Stargate }) {
           }}
         >
           <Flex width={"100%"}>
-            <Text align={"left"}>Edit {gate.session_name}</Text>
+            {icon ? <Pencil size="16" /> : <Text align={"left"}>Edit {gate.session_name}</Text>}
           </Flex>
         </Button>
       </Dialog.Trigger>

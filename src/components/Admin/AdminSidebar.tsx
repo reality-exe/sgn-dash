@@ -5,13 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 export default function AdminSidebar() {
   const router = useRouter();
   const path = usePathname();
-  console.log(path);
 
   return (
     <Box
       className="sidebar"
       p="4"
-      style={{ backgroundColor: "var(--color-panel-translucent)" }}
+      style={{ backgroundColor: "var(--color-panel-translucent)", backdropFilter: "blur(64px)" }}
       asChild
     >
       <Flex direction="column" gap="2">
@@ -29,7 +28,7 @@ export default function AdminSidebar() {
         <Box
           asChild
           style={{
-            backgroundColor: path === "/admin" ? "ButtonFace" : "",
+            backgroundColor: path === "/admin" ? "var(--gray-a4)" : "",
             borderRadius: 10,
           }}
           p="2"
@@ -42,7 +41,7 @@ export default function AdminSidebar() {
         <Box
           asChild
           style={{
-            backgroundColor: path === "/admin/stargates" ? "ButtonFace" : "",
+            backgroundColor: path === "/admin/stargates" ? "var(--gray-a4)" : "",
             borderRadius: 10,
           }}
           p="2"
@@ -55,7 +54,7 @@ export default function AdminSidebar() {
         <Box
           asChild
           style={{
-            backgroundColor: path === "/admin/users" ? "ButtonFace" : "",
+            backgroundColor: path === "/admin/users" ? "var(--gray-a4)" : "",
             borderRadius: 10,
           }}
           p="2"

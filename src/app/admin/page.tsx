@@ -61,7 +61,10 @@ export default function Admin() {
           <Box className="main overflow-auto w-full justify-center">
             <Box
               width="100%"
-              style={{ backgroundColor: "Background" }}
+              style={{
+                backgroundColor: "var(--color-panel-translucent)",
+                backdropFilter: "blur(64px)",
+              }}
               height="5rem"
               p="4"
               asChild
@@ -231,7 +234,9 @@ export default function Admin() {
                       <Text align="center" size="6" weight="medium">
                         Recently Updated Stargates
                       </Text>
-                      <Separator my="4" size="4" />
+                      <Inset mt="6" side="x">
+                        <Separator size="4" />
+                      </Inset>
                       <Inset clip={"padding-box"} side="x">
                         <Box maxHeight="15rem" overflowY="scroll">
                           <Table.Root>

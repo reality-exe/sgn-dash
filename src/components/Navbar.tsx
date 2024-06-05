@@ -11,7 +11,10 @@ interface Props {
 export default function Navbar(props: Props) {
   return (
     <Flex
-      style={{ backgroundColor: "Background" }}
+      style={{
+        backgroundColor: "var(--color-panel-translucent)",
+        backdropFilter: "blur(64px)",
+      }}
       width={{ initial: "100%" }}
       height={{ initial: "5rem" }}
       align={"center"}

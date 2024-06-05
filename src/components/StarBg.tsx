@@ -22,19 +22,7 @@ export default function StarBg() {
       setInit(true);
     });
   });
-
-  async function checkAuth() {
-    try {
-      let response = await pb.collection("users").authRefresh();
-      // router.push("/");
-    } catch (err) {
-      router.push("/");
-    }
-  }
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  
   const particlesLoaded = async (container?: Container): Promise<void> => {
     console.log(container);
   };

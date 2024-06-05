@@ -26,9 +26,6 @@ import {
 } from "@tsparticles/engine";
 import { ClientResponseError } from "pocketbase";
 import { RiLoginCircleLine } from "react-icons/ri";
-import { DiscordLogoIcon } from "@radix-ui/react-icons";
-import { TbBrandDiscord } from "react-icons/tb";
-import { PiDiscordLogo } from "react-icons/pi";
 import { RxDiscordLogo } from "react-icons/rx";
 import { AuthentikAuth } from "@/types/AuthentikAuth";
 import { DiscordAuth } from "@/types/DiscordAuth";
@@ -65,7 +62,7 @@ export default function Login() {
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  });
   const particlesLoaded = async (container?: Container): Promise<void> => {
     console.log(container);
   };

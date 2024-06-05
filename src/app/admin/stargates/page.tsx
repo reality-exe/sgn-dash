@@ -33,7 +33,6 @@ export default function AdminStargate() {
   const router = useRouter();
   const [init, setInit] = useState<boolean>(false);
   const [user, setUser] = useState<RecordAuthResponse<User>>();
-  const [users, setUsers] = useState<User[]>();
   const [allGates, setAllGates] = useState<Stargate[]>([]);
   const [gates, setGates] = useState<ListResult<Stargate>>();
 
@@ -255,7 +254,7 @@ export default function AdminStargate() {
                           </Box>
                           <Button
                             variant="surface"
-                            disabled={gates?.page == gates?.totalPages}
+                            disabled={gates?.page >= gates?.totalPages}
                             onClick={() => {
                               let page = gates?.page ?? 1;
                               let newpage = page + 1;

@@ -14,57 +14,41 @@ import {
   Table,
   Tooltip,
   Inset,
+  Badge,
 } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { ListResult, RecordAuthResponse } from "pocketbase";
 import { useEffect, useState } from "react";
 import { pb } from "@/services/pocketbase.service";
-import { Stargate } from "@/types/PocketBase/Records/Stargate";
-import {
-  Aperture,
-  Circle,
-  HardDrives,
-  Pencil,
-  User as UserIco,
-} from "@phosphor-icons/react";
-import StargateEditDialog from "@/components/StargateEditDialog";
+
 
 export default function AdminStargate() {
   const router = useRouter();
   const [init, setInit] = useState<boolean>(false);
   const [user, setUser] = useState<RecordAuthResponse<User>>();
-  const [users, setUsers] = useState<User[]>();
-  const [allGates, setAllGates] = useState<Stargate[]>([]);
-  const [gates, setGates] = useState<ListResult<Stargate>>();
+  const [users, setUsers] = useState<ListResult<User>>();
+  const [usrPg, setUsrPg] = useState<number>(1);
+  
 
   useEffect(() => {
     pb.collection("users")
       .authRefresh()
       .then((user) => {
         setUser(user);
-
-        pb.collection("stargates")
-          .getFullList()
-          .then((sg) => {
-            setAllGates(sg);
-            pb.collection("stargates")
-              .getList(1, 5, { sort: "+owner_name" })
-              .then((sg) => {
-                setGates(sg);
-                setInit(true);
-              });
-          });
-      })
+        pb.collection("users").getList(usrPg, 5).then((v) => {
+          setUsers(v);
+        })
+        })
       .catch((err) => {
         router.push("/");
       });
-  }, [router]);
+  }, [router, usrPg]);
 
   function changeGatePage(page: number) {
-    pb.collection("stargates")
+    pb.collection("users")
       .getList(page, 5)
-      .then((gates) => {
-        setGates(gates);
+      .then((users) => {
+        setUsers(users) 
         console.log(page);
       });
   }
@@ -98,7 +82,7 @@ export default function AdminStargate() {
                   <Card>
                     <Flex direction="column">
                       <Text align="center" size="6" weight="medium">
-                        Active Stargates - {allGates.length ?? "--"}
+                        Registered Users - {users?.items.length ?? "--"}
                       </Text>
                       <Separator my="4" size="4" />
                       <Flex
@@ -115,11 +99,10 @@ export default function AdminStargate() {
                             justify="center"
                           >
                             <Text weight="bold" size="5" align="center">
-                              Public Stargates
+                              Administrators
                             </Text>
                             <Text size="6" align="center">
-                              {allGates.filter((v) => v.public_gate).length ??
-                                "--"}
+                              {}
                             </Text>
                           </Flex>
                         </Box>
@@ -130,97 +113,8 @@ export default function AdminStargate() {
                             align="center"
                             justify="center"
                           >
-                            <Text weight="bold" size="5" align="center">
-                              Hidden Stargates
-                            </Text>
                             <Text size="6" align="center">
-                              {allGates.filter((v) => !v.public_gate).length ??
-                                "--"}
-                            </Text>
-                          </Flex>
-                        </Box>
-                        <Separator orientation="vertical" size={"3"} />
-                        <Box>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                          >
-                            <Text weight="bold" size="5" align="center">
-                              MilkyWay Stargates
-                            </Text>
-                            <Text size="6" align="center">
-                              {allGates.filter((v) => v.gate_code == "M@")
-                                .length ?? "--"}
-                            </Text>
-                          </Flex>
-                        </Box>
-                        <Separator orientation="vertical" size={"3"} />
-                        <Box>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                          >
-                            <Text weight="bold" size="5" align="center">
-                              Pegasus Stargates
-                            </Text>
-                            <Text size="6" align="center">
-                              {allGates.filter((v) => v.gate_code == "P@")
-                                .length ?? "--"}
-                            </Text>
-                          </Flex>
-                        </Box>
-                        <Separator orientation="vertical" size={"3"} />
-                        <Box>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                          >
-                            <Text weight="bold" size="5" align="center">
-                              Universe Stargates
-                            </Text>
-                            <Text size="6" align="center">
-                              {allGates.filter((v) => v.gate_code == "U@")
-                                .length ?? "--"}
-                            </Text>
-                          </Flex>
-                        </Box>
-                        <Separator orientation="vertical" size={"3"} />
-                        <Box>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                          >
-                            <Text weight="bold" size="5" align="center">
-                              Dawn Stargates
-                            </Text>
-                            <Text size="6" align="center">
-                              {allGates.filter((v) => v.gate_code == "R*")
-                                .length ?? "--"}
-                            </Text>
-                          </Flex>
-                        </Box>
-                        <Separator orientation="vertical" size={"3"} />
-                        <Box>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                          >
-                            <Text weight="bold" size="5" align="center">
-                              Other Stargates
-                            </Text>
-                            <Text size="6" align="center">
-                              {allGates.filter(
-                                (v) =>
-                                  v.gate_code != "M@" &&
-                                  v.gate_code != "P@" &&
-                                  v.gate_code != "R*" &&
-                                  v.gate_code != "U@"
-                              ).length ?? "--"}
+                              {users?.items.filter((v) => v.tags.includes("admin")).length ?? "--"}
                             </Text>
                           </Flex>
                         </Box>
@@ -239,9 +133,9 @@ export default function AdminStargate() {
                         <Flex justify="center" align="center">
                           <Button
                             variant="surface"
-                            disabled={gates?.page == 1}
+                            disabled={users?.page == 1}
                             onClick={() => {
-                              let page = gates?.page ?? 1;
+                              let page = users?.page ?? 1;
                               let newpage = page - 1;
                               changeGatePage(newpage);
                             }}
@@ -250,14 +144,14 @@ export default function AdminStargate() {
                           </Button>
                           <Box flexGrow="1" asChild>
                             <Text align="center" size="6" weight="medium">
-                              All Stargates
+                             All Users 
                             </Text>
                           </Box>
                           <Button
                             variant="surface"
-                            disabled={gates?.page == gates?.totalPages}
+                            disabled={users?.page == users?.totalPages}
                             onClick={() => {
-                              let page = gates?.page ?? 1;
+                              let page = users?.page ?? 1;
                               let newpage = page + 1;
                               changeGatePage(newpage);
                             }}
@@ -270,73 +164,35 @@ export default function AdminStargate() {
                         <Separator size="4" />
                       </Inset>
                       <Inset clip={"padding-box"} side="x">
-                        <Box maxHeight="17rem">
+                        <Box maxHeight="30rem" overflowY="scroll">
                           <Table.Root>
                             <Table.Header>
                               <Table.Row>
                                 <Table.ColumnHeaderCell width="5.2rem" />
                                 <Table.ColumnHeaderCell>
-                                  Gate Address
+                                  Email
                                 </Table.ColumnHeaderCell>
                                 <Table.ColumnHeaderCell>
-                                  Gate Code
+                                  Username 
                                 </Table.ColumnHeaderCell>
                                 <Table.ColumnHeaderCell>
-                                  Gate Status
+                                  Discord ID
                                 </Table.ColumnHeaderCell>
                                 <Table.ColumnHeaderCell>
-                                  Owner
-                                </Table.ColumnHeaderCell>
-                                <Table.ColumnHeaderCell>
-                                  Session Name
-                                </Table.ColumnHeaderCell>
-                                <Table.ColumnHeaderCell>
-                                  Privacy
+                                  Tags
                                 </Table.ColumnHeaderCell>
                                 <Table.ColumnHeaderCell width="4rem" />
                               </Table.Row>
                             </Table.Header>
-
-                            <Table.Body>
-                              {gates?.items.map((v, i) => (
-                                <Table.Row key={`${v.gate_address}-${i}`}>
-                                  <Table.RowHeaderCell width="5.2rem">
-                                    <Flex gap="2">
-                                      <Tooltip
-                                        content={
-                                          v.is_headless
-                                            ? "Headless Session"
-                                            : "User Session"
-                                        }
-                                      >
-                                        {v.is_headless ? (
-                                          <HardDrives size="20" />
-                                        ) : (
-                                          <UserIco size="20" />
-                                        )}
-                                      </Tooltip>
-                                      {v.iris_state ? (
-                                        <Tooltip content="Iris Closed">
-                                          <Aperture size="20" />
-                                        </Tooltip>
-                                      ) : (
-                                        <Tooltip content="Iris Open">
-                                          <Circle size="20" />
-                                        </Tooltip>
-                                      )}
-                                    </Flex>
-                                  </Table.RowHeaderCell>
-                                  <Table.Cell>{v.gate_address}</Table.Cell>
-                                  <Table.Cell>{v.gate_code}</Table.Cell>
-                                  <Table.Cell>{v.gate_status}</Table.Cell>
-                                  <Table.Cell>{v.owner_name}</Table.Cell>
-                                  <Table.Cell>{v.session_name}</Table.Cell>
-                                  <Table.Cell>
-                                    {v.public_gate ? "Public" : "Hidden"}
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    <StargateEditDialog gate={v} icon={true} />
-                                  </Table.Cell>
+                            <Table.Body  >
+                              {users?.items.map((v, i) => (
+                                <Table.Row key={`${v.username}-${i}`}>
+                                  <Table.Cell><Avatar size="2" src={`https://aor-db.rxserver.net/api/files/users/${v.id}/${v.avatar}?thumb=64x64`} fallback={v.username.slice(0,2)} /></Table.Cell>
+                                  <Table.Cell>{v.email}</Table.Cell>
+                                  <Table.Cell>{v.username}</Table.Cell>
+                                  <Table.Cell>{v.discord_id ? <Text>{v.discord_id}</Text> :  <Text>Not Linked</Text>}</Table.Cell>
+                                  <Table.Cell>{v.tags.length == 0 ? <Badge>No Tags</Badge> : v.tags.map((txt) => (<Badge key={txt}>{txt}</Badge>))}</Table.Cell>
+                                  <Table.Cell />
                                 </Table.Row>
                               ))}
                             </Table.Body>

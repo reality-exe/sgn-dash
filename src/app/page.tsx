@@ -10,11 +10,7 @@ import {
   Popover,
   AlertDialog,
   ContextMenu,
-  Tooltip,
   Avatar,
-  Dialog,
-  Link,
-  SegmentedControl,
 } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 
@@ -24,8 +20,6 @@ import {
   RadioCards,
   Text,
   Flex,
-  TextField,
-  Select,
   Portal,
 } from "@radix-ui/themes";
 import { useAppContext } from "@/context";
@@ -35,8 +29,7 @@ import { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { NextFont } from "next/dist/compiled/@next/font";
-import { RecordAuthResponse } from "pocketbase";
-import { User } from "@/types/PocketBase/User";
+
 import { Stargate } from "@/types/PocketBase/Records/Stargate";
 import EditDialog from "@/components/StargateEditDialog";
 import toast, { Toaster } from "react-hot-toast";
@@ -63,7 +56,7 @@ export default function Home() {
         setUser(val);
       })
       .catch(() => {});
-  }, []);
+  });
 
   async function getGates() {
     let response = await pb.collection("stargates").getFullList();

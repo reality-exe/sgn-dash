@@ -218,7 +218,7 @@ export default function Login() {
                               pb.collection("users").update(auth.record.id, {
                                 discord_id: auth.meta.id,
                               });
-                              // router.push("/");
+                              router.push("/");
                             });
                         }}
                       >

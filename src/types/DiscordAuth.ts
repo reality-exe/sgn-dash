@@ -1,4 +1,4 @@
-import { UserRecord as Record } from "./UserRecord";
+import { User as Record } from "./PocketBase/User";
 
 export interface DiscordAuth {
     meta:   Meta;

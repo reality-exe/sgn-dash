@@ -20,7 +20,12 @@ import { ListResult, RecordAuthResponse } from "pocketbase";
 import { useEffect, useState } from "react";
 import { pb } from "@/services/pocketbase.service";
 import { Stargate } from "@/types/PocketBase/Records/Stargate";
-import { Aperture, Circle, HardDrives, User as UserIco } from "@phosphor-icons/react";
+import {
+  Aperture,
+  Circle,
+  HardDrives,
+  User as UserIco,
+} from "@phosphor-icons/react";
 
 export default function Admin() {
   const router = useRouter();
@@ -315,7 +320,250 @@ export default function Admin() {
           </Box>
         </Box>
       </Box>
-      <Box className="hidden md:block lg:hidden">md</Box>
+      <Box className="hidden md:block lg:hidden">
+        <Box className="main overflow-auto w-full justify-center">
+          <Box
+            width="100%"
+            style={{
+              backgroundColor: "var(--color-panel-translucent)",
+              backdropFilter: "blur(64px)",
+            }}
+            height="5rem"
+            p="4"
+            asChild
+          >
+            <Flex justify="end" align="center">
+              <UserDropdown />
+            </Flex>
+          </Box>
+          <Box p="4" width="100%">
+            <Flex gap="4">
+              <Flex direction="column" justify="center" width="100%">
+                <Card>
+                  <Flex direction="column">
+                    <Text align="center" size="6" weight="medium">
+                      Active Stargates - {gates?.totalItems ?? "--"}
+                    </Text>
+                    <Separator my="4" size="4" />
+                    <Flex
+                      align="center"
+                      justify="center"
+                      width="100%"
+                      gap="4"
+                      mx="4"
+                    >
+                      <Box>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Text weight="bold" size="5" align="center">
+                            MilkyWay Stargates
+                          </Text>
+                          <Text size="6" align="center">
+                            {gates?.items.filter((v) => v.gate_code == "M@")
+                              .length ?? "--"}
+                          </Text>
+                        </Flex>
+                      </Box>
+                      <Separator orientation="vertical" size={"3"} />
+                      <Box>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Text weight="bold" size="5" align="center">
+                            Pegasus Stargates
+                          </Text>
+                          <Text size="6" align="center">
+                            {gates?.items.filter((v) => v.gate_code == "P@")
+                              .length ?? "--"}
+                          </Text>
+                        </Flex>
+                      </Box>
+                      <Separator orientation="vertical" size={"3"} />
+                      <Box>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Text weight="bold" size="5" align="center">
+                            Universe Stargates
+                          </Text>
+                          <Text size="6" align="center">
+                            {gates?.items.filter((v) => v.gate_code == "U@")
+                              .length ?? "--"}
+                          </Text>
+                        </Flex>
+                      </Box>
+                      <Separator orientation="vertical" size={"3"} />
+                      <Box>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Text weight="bold" size="5" align="center">
+                            Dawn Stargates
+                          </Text>
+                          <Text size="6" align="center">
+                            {gates?.items.filter((v) => v.gate_code == "R*")
+                              .length ?? "--"}
+                          </Text>
+                        </Flex>
+                      </Box>
+                      <Separator orientation="vertical" size={"3"} />
+                      <Box>
+                        <Flex
+                          direction="column"
+                          align="center"
+                          justify="center"
+                        >
+                          <Text weight="bold" size="5" align="center">
+                            Other Stargates
+                          </Text>
+                          <Text size="6" align="center">
+                            {gates?.items.filter(
+                              (v) =>
+                                v.gate_code != "M@" &&
+                                v.gate_code != "P@" &&
+                                v.gate_code != "R*" &&
+                                v.gate_code != "U@"
+                            ).length ?? "--"}
+                          </Text>
+                        </Flex>
+                      </Box>
+                    </Flex>
+                  </Flex>
+                </Card>
+              </Flex>
+            </Flex>
+            <Flex direction="column" justify="center" mt="4">
+              <Card>
+                <Flex direction="column">
+                  <Text align="center" size="6" weight="medium">
+                    Registered Users
+                  </Text>
+                  <Separator my="4" size="4" />
+                  <Flex align="center" justify="center" gap="4" width="100%">
+                    <Box>
+                      <Flex direction="column" align="center" justify="center">
+                        <Text weight="bold" size="5" align="center">
+                          Users
+                        </Text>
+                        <Text size="6" align="center">
+                          {users?.length ?? "--"}
+                        </Text>
+                      </Flex>
+                    </Box>
+                    <Separator orientation="vertical" size={"3"} />
+                    <Box>
+                      <Flex direction="column" align="center" justify="center">
+                        <Text weight="bold" size="5" align="center">
+                          Admins
+                        </Text>
+                        <Text size="6" align="center">
+                          {users?.filter((v) => v.tags.includes("admin"))
+                            .length ?? "--"}
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </Flex>
+              </Card>
+            </Flex>
+          </Box>
+          <Box p="4" width="100%">
+            <Flex gap="4">
+              <Flex direction="column" justify="center" width="100%">
+                <Card>
+                  <Flex direction="column">
+                    <Text align="center" size="6" weight="medium">
+                      Recently Updated Stargates
+                    </Text>
+                    <Inset mt="6" side="x">
+                      <Separator size="4" />
+                    </Inset>
+                    <Inset clip={"padding-box"} side="x">
+                      <Box maxHeight="15rem" overflowY="scroll">
+                        <Table.Root>
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.ColumnHeaderCell />
+                              <Table.ColumnHeaderCell>
+                                Gate Address
+                              </Table.ColumnHeaderCell>
+                              <Table.ColumnHeaderCell>
+                                Gate Code
+                              </Table.ColumnHeaderCell>
+                              <Table.ColumnHeaderCell>
+                                Gate Status
+                              </Table.ColumnHeaderCell>
+                              <Table.ColumnHeaderCell>
+                                Owner
+                              </Table.ColumnHeaderCell>
+                              <Table.ColumnHeaderCell>
+                                Session Name
+                              </Table.ColumnHeaderCell>
+                              <Table.ColumnHeaderCell>
+                                Privacy
+                              </Table.ColumnHeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+
+                          <Table.Body>
+                            {gates?.items.map((v, i) => (
+                              <Table.Row key={`${v.gate_address}-${i}`}>
+                                <Table.RowHeaderCell width="5rem">
+                                  <Flex gap="2">
+                                    <Tooltip
+                                      content={
+                                        v.is_headless
+                                          ? "Headless Session"
+                                          : "User Session"
+                                      }
+                                    >
+                                      {v.is_headless ? (
+                                        <HardDrives size="20" />
+                                      ) : (
+                                        <UserIco size="20" />
+                                      )}
+                                    </Tooltip>
+                                    {v.iris_state ? (
+                                      <Tooltip content="Iris Closed">
+                                        <Aperture size="20" />
+                                      </Tooltip>
+                                    ) : (
+                                      <Tooltip content="Iris Open">
+                                        <Circle size="20" />
+                                      </Tooltip>
+                                    )}
+                                  </Flex>
+                                </Table.RowHeaderCell>
+                                <Table.Cell>{v.gate_address}</Table.Cell>
+                                <Table.Cell>{v.gate_code}</Table.Cell>
+                                <Table.Cell>{v.gate_status}</Table.Cell>
+                                <Table.Cell>{v.owner_name}</Table.Cell>
+                                <Table.Cell>{v.session_name}</Table.Cell>
+                                <Table.Cell>
+                                  {v.public_gate ? "Public" : "Hidden"}
+                                </Table.Cell>
+                              </Table.Row>
+                            ))}
+                          </Table.Body>
+                        </Table.Root>
+                      </Box>
+                    </Inset>
+                  </Flex>
+                </Card>
+              </Flex>
+            </Flex>
+          </Box>
+        </Box>
+      </Box>
       <Box className="block md:hidden lg:hidden">sm</Box>
     </Box>
   );
@@ -330,7 +578,11 @@ function UserDropdown() {
           <Flex gap="4">
             <Avatar
               src={`https://aor-db.rxserver.net/api/files/users/${pb.authStore.model?.id}/${pb.authStore.model?.avatar}`}
-              fallback={pb.authStore.model?.username.slice(0, 2) ?? "UN"}
+              fallback={
+                pb.authStore.model?.username
+                  ? pb.authStore.model?.username
+                  : "UN"
+              }
             />
             {pb.authStore.model?.username}
           </Flex>

@@ -254,7 +254,7 @@ export default function AdminStargate() {
                           </Box>
                           <Button
                             variant="surface"
-                            disabled={gates?.page >= gates?.totalPages}
+                            disabled={gates?.page ? gates?.page >= gates?.totalPages : true}
                             onClick={() => {
                               let page = gates?.page ?? 1;
                               let newpage = page + 1;

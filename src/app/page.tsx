@@ -36,6 +36,9 @@ import toast, { Toaster } from "react-hot-toast";
 import StarBg from "@/components/StarBg";
 import dynamic from "next/dynamic";
 
+import { useImmer } from "use-immer";
+import { User } from "@/types/PocketBase/User";
+
 const inter = Inter({ subsets: ["latin"] });
 const anquietas = localFont({ src: "../assets/fonts/anquietas.ttf" });
 const milkyWay = localFont({ src: "../assets/fonts/stargate_sg1.ttf" });
@@ -45,7 +48,7 @@ const universe = localFont({ src: "../assets/fonts/stargate_universe.ttf" });
 export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
-  const [stargates, setStargates] = useState<Stargate[]>();
+  const [stargates, updateStargates] = useImmer<Stargate[]>([]);
 
   const { user, setUser } = useAppContext();
 
@@ -56,17 +59,48 @@ export default function Home() {
         setUser(val);
       })
       .catch(() => {});
-  });
-
-  async function getGates() {
-    let response = await pb.collection("stargates").getFullList();
-    setStargates(response);
-    setLoading(false);
-  }
+  }, []);
 
   useEffect(() => {
-    getGates();
-  });
+    pb.collection("stargates")
+      .getFullList()
+      .then((v) => {
+        updateStargates(v);
+        setLoading(false);
+      });
+    pb.collection("stargates").subscribe("*", (data) => {
+      switch (data.action) {
+        case "create":
+          updateStargates((draft) => {
+            draft.push(data.record);
+          });
+          break;
+        case "update":
+          updateStargates((draft) => {
+            let gate = draft.find(
+              (v) => v.gate_address === data.record.gate_address
+            );
+
+            gate!.active_users = data.record.active_users;
+            gate!.max_users = data.record.max_users;
+            gate!.iris_state = data.record.iris_state;
+            gate!.public_gate = data.record.public_gate;
+            gate!.session_name = data.record.session_name;
+            gate!.updated = data.record.updated;
+            gate!.gate_status = data.record.gate_status;
+          });
+          break;
+        case "delete":
+          updateStargates((draft) => {
+            draft.splice(draft.findIndex(gate => gate.id === data.record.id))
+          });
+          break;
+
+        default:
+          break;
+      }
+    });
+  }, []);
 
   return (
     <Box>
@@ -105,7 +139,7 @@ export default function Home() {
             <GateItemSkeleton />
           </>
         ) : (
-          stargates?.map((gate, i) =>
+          stargates.map((gate, i) =>
             user ? (
               <ContextMenu.Root key={i}>
                 <ContextMenu.Trigger>

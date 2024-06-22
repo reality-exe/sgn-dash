@@ -29,9 +29,9 @@ import { RiLoginCircleLine } from "react-icons/ri";
 import { RxDiscordLogo } from "react-icons/rx";
 import { AuthentikAuth } from "@/types/AuthentikAuth";
 import { DiscordAuth } from "@/types/DiscordAuth";
+import StarBg from "@/components/StarBg";
 
 export default function Login() {
-  const [init, setInit] = useState(false);
   const router = useRouter();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
@@ -45,14 +45,6 @@ export default function Login() {
   const [passwordConfirmError, setPasswordConfirmError] = useState<string>();
   const [usernameError, setUsernameError] = useState<string>();
 
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
-  });
-
   async function checkAuth() {
     try {
       let response = await pb.collection("users").authRefresh();
@@ -63,77 +55,12 @@ export default function Login() {
   useEffect(() => {
     checkAuth();
   });
-  const particlesLoaded = async (container?: Container): Promise<void> => {
-    console.log(container);
-  };
-
-  const options: ISourceOptions = useMemo(
-    () => ({
-      fpsLimit: 60,
-      interactivity: {
-        events: {
-          onClick: {
-            enable: true,
-            mode: "push",
-          },
-        },
-        modes: {
-          push: {
-            quantity: 4,
-          },
-        },
-      },
-      particles: {
-        color: {
-          value: "#ffffff",
-        },
-        links: {
-          color: "#ffffff",
-          distance: 150,
-          enable: true,
-          opacity: 0.5,
-          width: 1,
-        },
-        move: {
-          direction: MoveDirection.none,
-          enable: true,
-          outModes: {
-            default: OutMode.out,
-          },
-          random: false,
-          speed: 1,
-          straight: false,
-        },
-        number: {
-          density: {
-            enable: true,
-          },
-          value: 90,
-        },
-        opacity: {
-          value: 0.5,
-        },
-        shape: {
-          type: "circle",
-        },
-        size: {
-          value: { min: 1, max: 5 },
-        },
-      },
-      detectRetina: false,
-    }),
-    []
-  );
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center p-24">
-      <Particles
-        id="tsparticles"
-        particlesLoaded={particlesLoaded}
-        options={options}
-      />
       <Portal>
         <Toaster position="top-left" />
+        <StarBg />
       </Portal>
       <Box asChild height={"fit-content"} width={"25rem"}>
         <Card>

@@ -1,7 +1,8 @@
 import PocketBase, { type AuthModel } from "pocketbase";
+import type { TPB } from "./types/pocketbaseTypes";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const pb = new PocketBase("https://aor-db.rxserver.net");
+  const pb = new PocketBase("https://aor-db.rxserver.net") as TPB;
 
   const cookie = useCookie<{ token: string; model: AuthModel | null }>(
     "pb_auth",

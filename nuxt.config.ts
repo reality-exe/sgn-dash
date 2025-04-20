@@ -8,7 +8,13 @@ export default defineNuxtConfig({
   plugins: [
     "./plugins/pocketbase.ts"
   ],
-  modules: ["shadcn-nuxt", "@nuxtjs/color-mode"],
+  modules: [
+    "shadcn-nuxt",
+    "@nuxtjs/color-mode",
+    "nuxt-particles",
+    "@nuxt/icon",
+    "@nuxt/image",
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

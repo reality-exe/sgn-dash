@@ -12,25 +12,41 @@ async function getGates() {
 }
 getGates()
 
-function serverIcon(b:boolean) {
-    return b ? "mdi:server" : "mdi:account"
-}
+
 </script>
 
 <template>
     <div>
-        <header class="w-full h-16 bg-neutral-900 flex items-center px-4">
+        <header class="w-full h-18 bg-neutral-900 flex items-center px-4">
             <div class="flex-1 flex items-center gap-4">
                 <img src="/images/AoR_Chevron2.png" width="46" height="46" />
                 <p class="text-xl font-medium">Ancients of Resonite</p>
             </div>
-            <div class="">a</div>
+            <div class="font-ancient text-4xl">Nou Ani Anquietas</div>
             <div class="flex-1 flex justify-end">
                 <div v-if="!account">
-                    <Button @click="navigateTo('/login')">Login</Button>
+                    <Button @click="navigateTo('/login')" variant="ghost">Login</Button>
                 </div>
                 <div v-if="account">
-                    <Button @click="navigateTo('/admin/dashboard')">Admin Dash</Button>
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button class="h-12 px-3" variant="outline">
+                                <div class="flex gap-2">
+                                    <div
+                                        class="bg-accent aspect-square p-2 rounded-lg size-8 flex items-center justify-center">
+                                        <p>{{ account.username.slice(0, 1) }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold">Hello, {{ account.username }}</p>
+                                        <p>{{ account.username }}</p>
+                                    </div>
+                                </div>
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            Popover content test
+                        </PopoverContent>
+                    </Popover>
                 </div>
             </div>
         </header>
@@ -41,3 +57,14 @@ function serverIcon(b:boolean) {
         </div>
     </div>
 </template>
+
+<style lang="css">
+@font-face {
+    font-family: 'Anquietas';
+    src: url('~/assets/fonts/sg_anq.ttf');
+}
+
+.font-ancient {
+    font-family: 'Anquietas';
+}
+</style>

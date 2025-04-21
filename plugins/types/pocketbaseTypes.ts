@@ -10,17 +10,22 @@ export interface User {
 }
 
 export interface Stargate {
-  id: string;
+  active_users: number;
+  collectionId: string;
+  collectionName: string;
+  created: Date;
   gate_address: string;
   gate_code: string;
-  session_name: string;
-  owner_name: string;
-  active_users: number;
-  max_users: number;
-  public_gate: boolean;
-  is_headless: boolean;
+  gate_status: string;
+  id: string;
   iris_state: boolean;
-  gate_status: "IDLE" | "INCOMING7" | "INCOMING8" | "INCOMING9" | "OPEN";
+  is_headless: boolean;
+  max_users: number;
+  owner_name: string;
+  public_gate: boolean;
+  session_name: string;
+  session_url: string;
+  updated: Date;
 }
 
 export interface TPB extends PocketBase {

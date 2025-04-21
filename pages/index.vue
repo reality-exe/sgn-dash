@@ -4,6 +4,7 @@ import { type AuthModel, type RecordModel } from 'pocketbase';
 let gates = ref<RecordModel[]>([]);
 const nuxtApp = useNuxtApp();
 const pb = nuxtApp.$pb;
+const loading = ref(true);
 
 const account = pb.authStore.model;
 
@@ -11,7 +12,9 @@ async function getGates() {
     gates.value = await pb.collection("stargates").getFullList();
 }
 getGates()
-
+watch([gates], () => {
+    loading.value = false
+})
 
 </script>
 
@@ -51,8 +54,17 @@ getGates()
             </div>
         </header>
         <div class="mb-96">
-            <div class="flex gap-4 p-4 flex-wrap justify-center">
+            <div v-if="!loading && gates.length == 0">
+                <h1 class="text-4xl font-bold">There are currently no gates online.</h1>
+            </div>
+            <div v-if="!loading" class="flex gap-4 p-4 flex-wrap justify-center">
                 <MainGateItem v-for="i in gates" :gate="i" />
+            </div>
+            <div v-if="loading" class="flex gap-4 p-4 flex-wrap justify-center">
+                <Skeleton class="w-96 h-44" />
+                <Skeleton class="w-96 h-44" />
+                <Skeleton class="w-96 h-44" />
+                <Skeleton class="w-96 h-44" />
             </div>
         </div>
     </div>

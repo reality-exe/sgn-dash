@@ -15,7 +15,7 @@ getGates()
 watch([gates], () => {
     loading.value = false
 })
-
+const glyphs = ref('text');
 </script>
 
 <template>
@@ -46,8 +46,35 @@ watch([gates], () => {
                                 </div>
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent>
-                            Popover content test
+                        <PopoverContent class="space-y-4">
+                            <Button class="w-full" v-if="account.tags.includes('admin')" @click="navigateTo('/admin/dashboard')">Admin Panel</Button>
+                            <Button class="w-full" variant="destructive">Logout</Button>
+                            <Separator label="Glyph Display" />
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button variant="outline" class="w-full">
+                                        {{ glyphs }} | <span>AEN2ZU</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent class="w-56">
+                                    <DropdownMenuLabel>Glyph Display</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuRadioGroup v-model="glyphs">
+                                        <DropdownMenuRadioItem value="text">
+                                            Text | <span>AEN2ZU</span>
+                                        </DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem value="mw">
+                                            Milky Way | <span class="glyphs-mw">AEN2ZU</span>
+                                        </DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem value="pg" class="glyphs-pg">
+                                            Pegasus | <span>AEN2ZU</span>
+                                        </DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem value="uni" class="glyphs-uni">
+                                            Universe | <span>AEN2ZU</span>
+                                        </DropdownMenuRadioItem>
+                                    </DropdownMenuRadioGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </PopoverContent>
                     </Popover>
                 </div>
@@ -69,14 +96,3 @@ watch([gates], () => {
         </div>
     </div>
 </template>
-
-<style lang="css">
-@font-face {
-    font-family: 'Anquietas';
-    src: url('~/assets/fonts/sg_anq.ttf');
-}
-
-.font-ancient {
-    font-family: 'Anquietas';
-}
-</style>

@@ -1,6 +1,43 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: 'Anquietas';
+  src: url('~/assets/fonts/sg_anq.ttf');
+}
+
+@font-face {
+  font-family: 'MilkyWay';
+  src: url('~/assets/fonts/sg_mw.ttf');
+}
+
+@font-face {
+  font-family: 'Pegasus';
+  src: url('~/assets/fonts/sg_pg.ttf');
+}
+
+@font-face {
+  font-family: 'Universe';
+  src: url('~/assets/fonts/sg_uni.ttf');
+}
+
+
+.font-ancient {
+  font-family: 'Anquietas';
+}
+
+.font-mw {
+  font-family: 'MilkyWay';
+}
+
+.font-pg {
+  font-family: 'Pegasus';
+}
+
+.font-uni {
+  font-family: 'Universe';
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

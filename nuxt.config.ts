@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["./assets/css/main.css"],
   plugins: [
-    "./plugins/pocketbase.ts"
+    "./plugins/pocketbase.ts",
   ],
   modules: [
     "shadcn-nuxt",
@@ -26,3 +26,4 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
 });
+

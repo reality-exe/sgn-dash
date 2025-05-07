@@ -15,7 +15,7 @@ const user = await pb.collection('users').authRefresh();
             <SidebarMenuItem>
               <div class="flex gap-2">
                 <div class="flex size-10 items-center justify-center">
-                  <img src="/images/AoR_Chevron2.png" />
+                  <img src="/images/AoR_Chevron2.png"  alt="Ancients of Resonite Logo"/>
                 </div>
                 <div class="grid flex-1 text-left text-sm leading-tight">
                   <span class="truncate font-semibold">Stargate Network</span>

@@ -51,10 +51,10 @@ const user = await pb.collection('users').authRefresh();
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <div class="p-4">
+        <main class="p-4">
           <slot />
 
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   </div>

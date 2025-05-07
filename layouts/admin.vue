@@ -34,7 +34,7 @@ const user = await pb.collection('users').authRefresh();
           </SidebarMenuButton>
           <SidebarMenuButton as-child>
             <a href="/admin/stargates">
-              <Icon class="text-lg" name="mdi:view-list" />
+              <Icon class="text-lg" name="mdi:format-list-bulleted" />
               <span>Stargates</span>
             </a>
           </SidebarMenuButton>

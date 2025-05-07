@@ -1,9 +1,8 @@
 import PocketBase, { type AuthModel } from "pocketbase";
-import type { TPB } from "./types/pocketbaseTypes";
+import type { TPB } from "./types/pocketbaseTypes.ts";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const pb = new PocketBase("https://aor-db.rxserver.net") as TPB;
-
   const cookie = useCookie<{ token: string; model: AuthModel | null }>(
     "pb_auth",
     {
@@ -12,7 +11,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       sameSite: "strict",
       httpOnly: false, // change to "true" if you want only server-side access
       maxAge: 604800,
-    }
+    },
   );
 
   // load the store data from the cookie value

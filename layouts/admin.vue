@@ -41,6 +41,12 @@ const user = await pb.collection('users').authRefresh();
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
+            <SidebarMenuButton as-child>
+              <a href="/">
+                <Icon class="text-lg" name="mdi:home" />
+                <span>Home</span>
+              </a>
+            </SidebarMenuButton>
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>

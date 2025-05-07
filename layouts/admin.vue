@@ -41,17 +41,6 @@ const user = await pb.collection('users').authRefresh();
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <div class="flex gap-2 items-center">
-                <div class="flex size-10 items-center rounded-lg bg-accent justify-center">
-                  {{ user.record.username.slice(0, 1) }}
-                </div>
-                <div class="grid flex-1 text-left text-sm leading-tight">
-                  <span class="truncate font-semibold">{{ user.record.username }}</span>
-                  <span class="truncate text-xs">{{ user.record.email }}</span>
-                </div>
-              </div>
-            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>

@@ -40,6 +40,7 @@ const tryLogin = form.handleSubmit(async (values) => {
         })
         .then((v) => {
             toast("logged in");
+            navigateTo('/')
         });
 });
 

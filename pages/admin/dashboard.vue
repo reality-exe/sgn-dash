@@ -131,7 +131,6 @@ onMounted(() => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="w-2" />
                   <TableHead class="w-10">
                     Gate Address
                   </TableHead>
@@ -139,32 +138,10 @@ onMounted(() => {
                   <TableHead>Sesson Name</TableHead>
                   <TableHead>Owner Name</TableHead>
                   <TableHead>User Count</TableHead>
-                  <TableHead class="w-2" />
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow v-for="gate in pagedGates?.items" :key="gate.id">
-                  <TableCell>
-                    <div class="space-x-2 mt-1">
-                      <Tooltip>
-                        <TooltipTrigger as-child>
-                          <Icon class="text-lg" :name="gate.public_gate ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Gate public state
-                          [{{ gate.public_gate ? "Public Gate" : "Hidden Gate" }}]
-                        </TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Icon class="text-lg" :name="gate.iris_state ? 'mdi:camera-iris' : 'mdi:circle-outline'" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          Gate iris state [{{ gate.iris_state ? "Iris Close" : "Iris Open" }}]
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
                   <TableCell>
                     <div class="flex">
                       <p>{{ gate.gate_address }}</p>
@@ -180,11 +157,6 @@ onMounted(() => {
                   <TableCell>{{ gate.session_name }}</TableCell>
                   <TableCell>{{ gate.owner_name }}</TableCell>
                   <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
-                  <TableCell>
-                    <Button size="icon" variant="ghost">
-                      <Icon class="text-lg" name="mdi:dots-horizontal" />
-                    </Button>
-                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

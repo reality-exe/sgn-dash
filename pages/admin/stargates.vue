@@ -132,6 +132,7 @@ onMounted(() => {
                   <TableHead>Sesson Name</TableHead>
                   <TableHead>Owner Name</TableHead>
                   <TableHead>User Count</TableHead>
+                  <TableHead class="w-2" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -172,6 +173,11 @@ onMounted(() => {
                   <TableCell>{{ gate.session_name }}</TableCell>
                   <TableCell>{{ gate.owner_name }}</TableCell>
                   <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
+                  <TableCell>
+                    <Button size="icon" variant="ghost">
+                      <Icon class="text-lg" name="mdi:dots-horizontal" />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

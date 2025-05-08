@@ -205,5 +205,3 @@ onMounted(() => {
   </TooltipProvider>
 
 </template>
-
-<style></style>

@@ -128,9 +128,10 @@ onMounted(() => {
                   <TableHead class="w-10">
                     Gate Address
                   </TableHead>
+                  <TableHead class="w-2">Gate Status</TableHead>
                   <TableHead>Sesson Name</TableHead>
-                  <TableHead>Gate Status</TableHead>
                   <TableHead>Owner Name</TableHead>
+                  <TableHead>User Count</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -167,9 +168,10 @@ onMounted(() => {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>{{ gate.session_name }}</TableCell>
                   <TableCell>{{ gate.gate_status }}</TableCell>
+                  <TableCell>{{ gate.session_name }}</TableCell>
                   <TableCell>{{ gate.owner_name }}</TableCell>
+                  <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

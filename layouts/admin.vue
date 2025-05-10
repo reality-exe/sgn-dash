@@ -38,6 +38,12 @@ const user = await pb.collection('users').authRefresh();
               <span>Stargates</span>
             </a>
           </SidebarMenuButton>
+          <SidebarMenuButton as-child>
+            <a href="/admin/users">
+              <Icon class="text-lg" name="mdi:account-supervisor" />
+              <span>Users</span>
+            </a>
+          </SidebarMenuButton>
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>

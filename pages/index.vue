@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type AuthModel, type RecordModel } from 'pocketbase';
+import { type RecordModel } from 'pocketbase';
 
 let gates = ref<RecordModel[]>([]);
 const nuxtApp = useNuxtApp();
@@ -24,6 +24,13 @@ watch([gates], () => {
 })
 
 const glyphs = ref('text');
+const glyphNames: any = {
+  text: "Text",
+  mw: "Milky Way",
+  uni: "Universe",
+  pg: "Pegasus"
+};
+
 </script>
 
 <template>
@@ -61,7 +68,7 @@ const glyphs = ref('text');
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                   <Button variant="outline" class="w-full">
-                    {{ glyphs }} | <span>AEN2ZU</span>
+                    {{ glyphNames[glyphs] }} | <span>AEN2ZU</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-56">

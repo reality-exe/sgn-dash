@@ -6,9 +6,13 @@ import type { Stargate } from '~/plugins/types/pocketbaseTypes'
 import * as z from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
+import { toast } from 'vue-sonner';
 const props = defineProps<{
-  stargate: Stargate
+  stargate: Stargate,
 }>()
+
+const nuxt = useNuxtApp()
+const pb = nuxt.$pb
 
 const formSchema = toTypedSchema(
   z.object({
@@ -16,7 +20,7 @@ const formSchema = toTypedSchema(
     gate_code: z.string().min(2).max(2).default(props.stargate.gate_code),
     session_name: z.string().default(props.stargate.session_name),
     owner_name: z.string().default(props.stargate.owner_name),
-    public_gate: z.boolean().default(props.stargate.public_gate),
+    public_gate: z.string().default(String(props.stargate.public_gate)),
     gate_status: z.string().default(props.stargate.gate_status)
   }),
 );
@@ -29,7 +33,19 @@ const [UseTemplate, GridForm] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 768px)')
 
 const isOpen = ref(false)
-const tryEdit = form.handleSubmit((values) => { })
+
+const tryEdit = form.handleSubmit(async (values) => {
+  pb.collection('stargates').update(props.stargate.id, {
+    gate_address: values.gate_address,
+    gate_code: values.gate_code,
+    public_gate: values.public_gate == 'true',
+    gate_status: values.gate_status,
+    owner_name: values.owner_name,
+    session_name: values.session_name
+  })
+  isOpen.value = false
+  toast('Saved stargate data')
+})
 </script>
 
 <template>
@@ -107,10 +123,10 @@ const tryEdit = form.handleSubmit((values) => { })
             </Select>
           </FormItem>
         </FormField>
-        <FormField v-slot="{ componentField }" name="gate_status">
+        <FormField v-slot="{ componentField }" name="public_gate">
           <FormItem class="flex-1">
-            <Select v-bind="componentField">
-              <FormLabel>Gate Publicity {{ String(stargate.public_gate) }}</FormLabel>
+            <Select v-bind="componentField" :default-value="String(stargate.public_gate)">
+              <FormLabel>Gate Publicity</FormLabel>
               <FormControl>
                 <SelectTrigger class="w-full">
                   <SelectValue placeholder="Set gate status" />
@@ -130,7 +146,7 @@ const tryEdit = form.handleSubmit((values) => { })
           </FormItem>
         </FormField>
       </div>
-      <Button type="submit" class="w-full">Save</Button>
+      <Button class="w-full" type="submit">Save</Button>
     </form>
   </UseTemplate>
 

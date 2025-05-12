@@ -40,8 +40,7 @@ onMounted(() => {
 
 <template>
   <TooltipProvider>
-
-    <div class="space-y-4">
+    <div class="space-y-4" vaul-drawer-wrapper>
       <!-- Top Bar -->
       <div>
         <div class="mb-4 flex items-center gap-2">

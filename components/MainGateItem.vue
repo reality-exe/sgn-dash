@@ -2,7 +2,7 @@
 import type { RecordModel } from 'pocketbase';
 import type { Stargate } from '~/plugins/types/pocketbaseTypes';
 
-defineProps<{ gate: RecordModel, glyphDisplay: string }>()
+defineProps<{ gate: Stargate, glyphDisplay: string }>()
 </script>
 
 <template>

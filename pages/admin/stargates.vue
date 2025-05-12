@@ -181,9 +181,7 @@ onMounted(() => {
                   <TableCell>{{ gate.owner_name }}</TableCell>
                   <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
                   <TableCell>
-                    <Button size="icon" variant="ghost">
-                      <Icon class="text-lg" name="mdi:dots-horizontal" />
-                    </Button>
+                    <AdminEdit />
                   </TableCell>
                 </TableRow>
               </TableBody>

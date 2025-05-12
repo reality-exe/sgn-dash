@@ -141,6 +141,13 @@ onMounted(() => {
                     <div class="space-x-2 mt-1">
                       <Tooltip>
                         <TooltipTrigger as-child>
+                          <Icon class="text-lg"
+                            :name="gate.is_headless ? 'mdi:server-outline' : 'mdi:account-outline'" />
+                        </TooltipTrigger>
+                        <TooltipContent>{{ gate.is_headless ? "Headless Session" : "User Session" }}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger as-child>
                           <Icon class="text-lg" :name="gate.public_gate ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" />
                         </TooltipTrigger>
                         <TooltipContent>

@@ -181,7 +181,7 @@ onMounted(() => {
                   <TableCell>{{ gate.owner_name }}</TableCell>
                   <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
                   <TableCell>
-                    <AdminEdit />
+                    <AdminEdit :stargate="gate" />
                   </TableCell>
                 </TableRow>
               </TableBody>

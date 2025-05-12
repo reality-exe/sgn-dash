@@ -43,7 +43,8 @@ const glyphNames: any = {
         <img src="/images/AoR_Chevron2.png" width="46" height="46" />
         <p class="text-xl font-medium">Ancients of Resonite</p>
       </div>
-      <div v-if="isDesktop" class="font-ancient w-full absolute text-center text-4xl">Nou Ani Anquietas</div>
+      <div v-if="isDesktop" class="font-ancient w-full pointer-events-none absolute text-center text-4xl">Nou Ani
+        Anquietas</div>
       <div class="flex-0 flex justify-end">
         <div v-if="!account">
           <Button @click="navigateTo('/login')" variant="ghost">Login</Button>
@@ -51,7 +52,7 @@ const glyphNames: any = {
         <div v-if="account">
           <Popover>
             <PopoverTrigger>
-              <Button class="h-12 px-4" :size="isDesktop ? 'default' : 'sm'" variant="outline">
+              <Button class="h-12 px-4" as-child variant="outline">
                 <div class="flex gap-2 items-center justify-center">
                   <Avatar>
                     <AvatarImage :src="pb.getFileUrl(account, account.avatar ?? '')" alt="pfp" />

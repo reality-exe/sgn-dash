@@ -13,15 +13,9 @@ const nuxt = useNuxtApp()
 
 const pb = nuxt.$pb;
 
-const stargates = ref<Stargate[]>([]);
+const { data: stargates } = useAsyncData('gates-1', () => pb.collection('stargates').getFullList())
 
-const pagedGates = ref<ListResult<Stargate>>({
-  totalItems: 0,
-  totalPages: 0,
-  page: 0,
-  perPage: 8,
-  items: []
-});
+const { data: pagedGates } = useAsyncData('paged-gates', () => pb.collection('stargates').getList(0, 8, { requestKey: "pagedgates" }))
 
 async function getGates() {
   stargates.value = await pb.collection('stargates').getFullList({ requestKey: "admin-full" })
@@ -31,11 +25,16 @@ async function changePage(page: number) {
   pagedGates.value = await pb.collection('stargates').getList(page, 8, { requestKey: "admin-paged" })
 }
 
+
+// TODO: Figure out some better way to update the list
+pb.collection('stargates').subscribe('*', (v) => {
+  refreshNuxtData()
+})
+
 onMounted(() => {
   getGates()
   changePage(0)
 })
-
 </script>
 
 <template>
@@ -73,7 +72,7 @@ onMounted(() => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger as-child>
-                    <span>[{{ stargates.length }}]</span>
+                    <span>[{{ stargates?.length }}]</span>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Total number of gates</p>
@@ -89,24 +88,25 @@ onMounted(() => {
             <div
               class="bg-neutral-900 min-w-[175px] rounded-lg flex-1 flex h-32 p-2 flex-col gap-2 justify-center items-center">
               <p class="font-bold text-2xl">Milky Way</p>
-              <p class="text-3xl">{{stargates.filter((v) => v.gate_code == "M@").length}}</p>
+              <p class="text-3xl">{{stargates?.filter((v) => v.gate_code == "M@").length}}</p>
             </div>
             <div class="bg-neutral-900 rounded-lg flex-1 flex h-32 p-2 flex-col gap-2 justify-center items-center">
               <p class="font-bold text-2xl">Pegasus</p>
-              <p class="text-3xl">{{stargates.filter((v) => v.gate_code == "P@").length}}</p>
+              <p class="text-3xl">{{stargates?.filter((v) => v.gate_code == "P@").length}}</p>
             </div>
             <div class="bg-neutral-900 rounded-lg flex-1 flex h-32 p-2 flex-col gap-2 justify-center items-center">
               <p class="font-bold text-2xl">Universe</p>
-              <p class="text-3xl">{{stargates.filter((v) => v.gate_code == "U@").length}}</p>
+              <p class="text-3xl">{{stargates?.filter((v) => v.gate_code == "U@").length}}</p>
             </div>
             <div class="bg-neutral-900 rounded-lg flex-1 flex h-32 p-2 flex-col gap-2 justify-center items-center">
               <p class="font-bold text-2xl">Dawn</p>
-              <p class="text-3xl">{{stargates.filter((v) => v.gate_code == "R@").length}}</p>
+              <p class="text-3xl">{{stargates?.filter((v) => v.gate_code == "R@").length}}</p>
             </div>
 
             <div class="bg-neutral-900 rounded-lg flex-1 flex h-32 p-2 flex-col gap-2 justify-center items-center">
               <p class="font-bold text-2xl">Others</p>
-              <p class="text-3xl">{{stargates.filter((v) => v.gate_code != "M@" && v.gate_code != "P@" && v.gate_code !=
+              <p class="text-3xl">{{stargates?.filter((v) => v.gate_code != "M@" && v.gate_code != "P@" && v.gate_code
+                !=
                 "U@" && v.gate_code != "R@").length}}</p>
             </div>
           </CardContent>
@@ -180,7 +180,7 @@ onMounted(() => {
                   <TableCell>{{ gate.owner_name }}</TableCell>
                   <TableCell>{{ gate.active_users }}/{{ gate.max_users }}</TableCell>
                   <TableCell>
-                    <AdminEdit :stargate="gate" />
+                    <AdminGateEdit :stargate="gate" />
                   </TableCell>
                 </TableRow>
               </TableBody>

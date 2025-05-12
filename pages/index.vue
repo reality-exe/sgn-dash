@@ -1,26 +1,29 @@
 <script setup lang="ts">
-import { type RecordModel } from 'pocketbase';
+import { useMediaQuery } from '@vueuse/core';
 
-let gates = ref<RecordModel[]>([]);
 const nuxtApp = useNuxtApp();
 const pb = nuxtApp.$pb;
 const loading = ref(true);
 
-const account = pb.authStore.model;
+const isDesktop = useMediaQuery('(min-width: 800px)')
 
-async function getGates() {
-  gates.value = await pb.collection("stargates").getFullList();
-}
+const { data: stargates } = useAsyncData('gates-1', async () => pb.collection('stargates').getFullList())
+const account = pb.authStore.model;
 
 async function logout() {
   pb.authStore.clear();
   reloadNuxtApp()
 }
 
-getGates()
-
-watch([gates], () => {
+watch([stargates], () => {
   loading.value = false
+}, {
+  once: true
+})
+
+// TODO: Figure out some better way to update the list
+pb.collection('stargates').subscribe('*', (v) => {
+  refreshNuxtData()
 })
 
 const glyphs = ref('text');
@@ -40,20 +43,21 @@ const glyphNames: any = {
         <img src="/images/AoR_Chevron2.png" width="46" height="46" />
         <p class="text-xl font-medium">Ancients of Resonite</p>
       </div>
-      <div class="font-ancient text-4xl">Nou Ani Anquietas</div>
-      <div class="flex-1 flex justify-end">
+      <div v-if="isDesktop" class="font-ancient w-full absolute text-center text-4xl">Nou Ani Anquietas</div>
+      <div class="flex-0 flex justify-end">
         <div v-if="!account">
           <Button @click="navigateTo('/login')" variant="ghost">Login</Button>
         </div>
         <div v-if="account">
           <Popover>
             <PopoverTrigger>
-              <Button class="h-12 px-3" variant="outline">
-                <div class="flex gap-2">
-                  <div class="bg-accent aspect-square p-2 rounded-lg size-8 flex items-center justify-center">
-                    <p>{{ account.username.slice(0, 1) }}</p>
-                  </div>
-                  <div>
+              <Button class="h-12 px-4" :size="isDesktop ? 'default' : 'sm'" variant="outline">
+                <div class="flex gap-2 items-center justify-center">
+                  <Avatar>
+                    <AvatarImage :src="pb.getFileUrl(account, account.avatar ?? '')" alt="pfp" />
+                    <AvatarFallback>{{ account.username.slice(0, 2) }}</AvatarFallback>
+                  </Avatar>
+                  <div v-if="isDesktop">
                     <p class="font-bold">Hello, {{ account.username }}</p>
                     <p>{{ account.username }}</p>
                   </div>
@@ -96,11 +100,11 @@ const glyphNames: any = {
       </div>
     </header>
     <div class="mb-96">
-      <div v-if="!loading && gates.length == 0">
+      <div v-if="!loading && stargates!.length == 0">
         <h1 class="text-4xl font-bold">There are currently no gates online.</h1>
       </div>
       <div v-if="!loading" class="flex gap-4 p-4 flex-wrap justify-center">
-        <MainGateItem class="flex-1" v-for="i in gates" :gate="i" :glyph-display="glyphs" />
+        <MainGateItem class="flex-1" v-for="i in stargates" :gate="i" :glyph-display="glyphs" />
       </div>
       <div v-if="loading" class="flex gap-4 p-4 flex-wrap justify-center">
         <Skeleton class="w-96 h-44" />

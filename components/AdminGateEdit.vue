@@ -45,6 +45,7 @@ const tryEdit = form.handleSubmit(async (values) => {
   })
   isOpen.value = false
   toast('Saved stargate data')
+  refreshNuxtData()
 })
 </script>
 

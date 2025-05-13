@@ -60,7 +60,6 @@ const glyphNames: any = {
                   </Avatar>
                   <div v-if="isDesktop">
                     <p class="font-bold">Hello, {{ account.username }}</p>
-                    <p>{{ account.username }}</p>
                   </div>
                 </div>
               </Button>
@@ -73,7 +72,7 @@ const glyphNames: any = {
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                   <Button variant="outline" class="w-full">
-                    {{ glyphNames[glyphs] }} | <span>AEN2ZU</span>
+                    {{ glyphNames[glyphs] }}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent class="w-56">
@@ -81,16 +80,16 @@ const glyphNames: any = {
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup v-model="glyphs">
                     <DropdownMenuRadioItem value="text">
-                      Text | <span>AEN2ZU</span>
+                      Text
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="mw">
-                      Milky Way | <span class="glyphs-mw">AEN2ZU</span>
+                      Milky Way
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="pg" class="glyphs-pg">
-                      Pegasus | <span>AEN2ZU</span>
+                      Pegasus
                     </DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="uni" class="glyphs-uni">
-                      Universe | <span>AEN2ZU</span>
+                      Universe
                     </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>

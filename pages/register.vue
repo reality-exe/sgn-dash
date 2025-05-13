@@ -34,7 +34,7 @@ const tryRegister = form.handleSubmit(async (values) => {
       password: values.password,
       passwordConfirm: values.passwordConfirm
     })
-    .catch((r) => {
+    .catch(() => {
       toast("Failed to register", {
         description:
           "Something went wrong when trying to register.\nPlease double check you typed in the correct information.",
@@ -45,7 +45,7 @@ const tryRegister = form.handleSubmit(async (values) => {
         important: true,
       });
     })
-    .then((v) => {
+    .then(() => {
       toast("logged in");
       navigateTo('/')
     });
@@ -54,10 +54,10 @@ const tryRegister = form.handleSubmit(async (values) => {
 async function discordLogin() {
   pb.collection('users').authWithOAuth2({
     provider: "discord"
-  }).then(v => {
+  }).then(() => {
     toast.success("Logged in with Discord")
     navigateTo('/')
-  }).catch((r) => {
+  }).catch(() => {
     toast.error("Failed to login with Discord", {})
   })
 }

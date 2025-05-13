@@ -22,7 +22,7 @@ watch([stargates], () => {
 })
 
 // TODO: Figure out some better way to update the list
-pb.collection('stargates').subscribe('*', (v) => {
+pb.collection('stargates').subscribe('*', () => {
   refreshNuxtData()
 })
 

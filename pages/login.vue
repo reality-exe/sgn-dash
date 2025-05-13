@@ -27,7 +27,7 @@ const pb = nuxt.$pb;
 const tryLogin = form.handleSubmit(async (values) => {
   pb.collection("users")
     .authWithPassword(values.email, values.password)
-    .catch((r) => {
+    .catch(() => {
       toast("Failed to login", {
         description:
           "Something went wrong when trying to login.\nPlease double check you typed in the corrent information.",
@@ -38,7 +38,7 @@ const tryLogin = form.handleSubmit(async (values) => {
         important: true,
       });
     })
-    .then((v) => {
+    .then(() => {
       toast.success("Logged in");
       navigateTo('/')
     });
@@ -47,10 +47,10 @@ const tryLogin = form.handleSubmit(async (values) => {
 async function discordLogin() {
   pb.collection('users').authWithOAuth2({
     provider: "discord"
-  }).then(v => {
+  }).then(() => {
     toast.success("Logged in with Discord")
     navigateTo('/')
-  }).catch((r) => {
+  }).catch(() => {
     toast.error("Failed to login with Discord", {})
   })
 }

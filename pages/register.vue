@@ -107,7 +107,7 @@ const passVis = ref(false);
               <FormMessage />
             </FormItem>
           </FormField>
-          <FormField v-slot="{ componentField }" name="confirmPassword">
+          <FormField v-slot="{ componentField }" name="passwordConfirm">
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>

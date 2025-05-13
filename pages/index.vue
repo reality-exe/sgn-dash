@@ -38,17 +38,21 @@ const glyphNames: any = {
 
 <template>
   <div>
+    <div v-if="isDesktop"
+      class="font-ancient w-full pointer-events-none absolute bottom-1 text-center text-4xl text-muted">Nou Ani
+      Anquietas</div>
     <header class="w-full h-18 bg-neutral-900 flex items-center px-4">
       <div class="flex-1 flex items-center gap-4">
         <img src="/images/AoR_Chevron2.png" width="46" height="46" />
         <p class="text-xl font-medium">Ancients of Resonite</p>
       </div>
-      <div v-if="isDesktop" class="font-ancient w-full pointer-events-none absolute text-center text-4xl">Nou Ani
-        Anquietas</div>
-      <div class="flex-0 flex justify-end">
+      <div class="flex-0 flex justify-end gap-2">
         <div v-if="!account">
-          <Button @click="navigateTo('/login')" variant="ghost">Login</Button>
+          <Button class="h-12" @click="navigateTo('/login')" variant="ghost">Login</Button>
         </div>
+        <ClientOnly fallback="loading...">
+          <GlyphSelector />
+        </ClientOnly>
         <div v-if="account">
           <Popover>
             <PopoverTrigger>
@@ -68,32 +72,6 @@ const glyphNames: any = {
               <Button class="w-full" v-if="account.tags.includes('admin')" @click="navigateTo('/admin/dashboard')">Admin
                 Panel</Button>
               <Button @click="logout" class="w-full" variant="destructive">Logout</Button>
-              <Separator label="Glyph Display" />
-              <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                  <Button variant="outline" class="w-full">
-                    {{ glyphNames[glyphs] }}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent class="w-56">
-                  <DropdownMenuLabel>Glyph Display</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuRadioGroup v-model="glyphs">
-                    <DropdownMenuRadioItem value="text">
-                      Text
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="mw">
-                      Milky Way
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="pg" class="glyphs-pg">
-                      Pegasus
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="uni" class="glyphs-uni">
-                      Universe
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </PopoverContent>
           </Popover>
         </div>

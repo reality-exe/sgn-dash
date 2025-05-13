@@ -3,7 +3,11 @@ import { useClipboard } from '@vueuse/core';
 import type { RecordModel } from 'pocketbase';
 import type { Stargate } from '~/plugins/types/pocketbaseTypes';
 
-defineProps<{ gate: Stargate, glyphDisplay: string }>()
+import { useStorage } from '@vueuse/core';
+
+defineProps<{ gate: Stargate }>()
+
+const glyphDisplay = useStorage('glyph-display', 'text', localStorage, { mergeDefaults: true })
 
 const glyphsOpened = ref<boolean>(false)
 </script>
@@ -12,15 +16,19 @@ const glyphsOpened = ref<boolean>(false)
   <div>
     <div v-if="glyphsOpened"
       class="w-full z-50 fixed left-0 top-0 min-h-screen bg-black/50 backdrop-blur-md flex items-center justify-center text-9xl">
-      <Button size="icon" variant="secondary" class="absolute right-1 top-1 m-6"
-        @click="glyphsOpened = false">X</Button>
-        <p
+      <div class="absolute right-1 top-1 mr-6">
+        <Button size="icon" variant="secondary" @click="glyphsOpened = false">X</Button>
+      </div>
+      <div class="absolute left-1 top-1 ml-6">
+        <GlyphSelector />
+      </div>
+      <p
         :class="{ 'font-mw': glyphDisplay == 'mw', 'font-pg': glyphDisplay == 'pg', 'font-uni': glyphDisplay == 'uni' }">
         {{ gate.gate_address }}<span class="text-violet-400">{{ gate.gate_code }}</span></p>
     </div>
     <div>
       <TooltipProvider disableHoverableContent>
-        <Card class="min-w-[250px] gap-0 p-3.5">
+        <Card class="min-w-[245px] gap-0 p-3.5">
           <CardHeader class="gap-1 px-0">
             <CardTitle>
               <div class="flex items-center gap-2">

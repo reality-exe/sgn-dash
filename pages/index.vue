@@ -38,8 +38,9 @@ const glyphNames: any = {
 
 <template>
   <div>
-    <div v-if="isDesktop"
-      class="font-ancient w-full pointer-events-none absolute bottom-1 text-center text-4xl text-muted">Nou Ani
+    <div class="font-ancient w-full pointer-events-none fixed bottom-1 text-center text-4xl text-muted">
+      Nou
+      Ani
       Anquietas</div>
     <header class="w-full h-18 bg-neutral-900 flex items-center px-4">
       <div class="flex-1 flex items-center gap-4">

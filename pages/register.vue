@@ -78,7 +78,7 @@ const passVis = ref(false);
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="some unique(probablynot) username" v-bind="componentField" />
+                <Input type="text" placeholder="some unique(probablynot) username" v-bind="componentField" />
               </FormControl>
             </FormItem>
           </FormField>

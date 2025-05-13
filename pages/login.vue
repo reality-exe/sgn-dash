@@ -39,15 +39,20 @@ const tryLogin = form.handleSubmit(async (values) => {
       });
     })
     .then((v) => {
-      toast("logged in");
+      toast.success("Logged in");
       navigateTo('/')
     });
 });
 
 async function discordLogin() {
-  toast("Discord login not implemented", {
-    description: "Discord login hasnt been implemented yet in the backend",
-  });
+  pb.collection('users').authWithOAuth2({
+    provider: "discord"
+  }).then(v => {
+    toast.success("Logged in with Discord")
+    navigateTo('/')
+  }).catch((r) => {
+    toast.error("Failed to login with Discord", {})
+  })
 }
 
 const passVis = ref(false);

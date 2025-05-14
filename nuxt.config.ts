@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "nuxt-particles",
     "@nuxt/icon",
     "@nuxt/image",
+    "nuxt-svgo",
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -26,4 +27,3 @@ export default defineNuxtConfig({
     componentDir: "./components/ui",
   },
 });
-

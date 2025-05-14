@@ -70,6 +70,7 @@ const glyphNames: any = {
               </Button>
             </PopoverTrigger>
             <PopoverContent class="space-y-4">
+              <Button class="w-full" @click="navigateTo('/profile')">My Profile</Button>
               <Button class="w-full" v-if="account.tags.includes('admin')" @click="navigateTo('/admin/dashboard')">Admin
                 Panel</Button>
               <Button @click="logout" class="w-full" variant="destructive">Logout</Button>

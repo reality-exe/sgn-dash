@@ -6,6 +6,8 @@ definePageMeta({
   middleware: "auth",
 });
 
+import RSNLogomarkWhite from "~/assets/icons/RSN_Logomark_White.svg"
+
 import { toast } from "vue-sonner";
 import * as z from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -97,6 +99,10 @@ const passVis = ref(false);
         <Button class="w-full" variant="outline" type="button" @click="discordLogin()">
           <Icon class="text-lg" name="ic:round-discord" /> Continue
           with Discord
+        </Button>
+        <Button class="w-full" variant="outline" type="button" @click="discordLogin()">
+          <RSNLogomarkWhite />
+          Continue with Resonite
         </Button>
         <p class="w-full text-center text-sm">Dont have an account? <a class="underline text-white"
             href="/register">Register here</a> :3</p>

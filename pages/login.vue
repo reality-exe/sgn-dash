@@ -100,10 +100,11 @@ const passVis = ref(false);
           <Icon class="text-lg" name="ic:round-discord" /> Continue
           with Discord
         </Button>
-        <Button class="w-full" variant="outline" type="button" @click="discordLogin()">
+        <!-- INFO Waiting for Resonite to give a proper OAuth method -->
+        <!-- <Button class="w-full" variant="outline" type="button" @click="discordLogin()">
           <RSNLogomarkWhite />
           Continue with Resonite
-        </Button>
+        </Button> -->
         <p class="w-full text-center text-sm">Dont have an account? <a class="underline text-white"
             href="/register">Register here</a> :3</p>
       </CardContent>

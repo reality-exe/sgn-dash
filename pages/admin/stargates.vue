@@ -3,8 +3,6 @@ definePageMeta({
   middleware: "admin",
   layout: "admin"
 })
-import type { ListResult } from 'pocketbase';
-import type { Stargate } from '~/plugins/types/pocketbaseTypes';
 
 useHead({
   title: "SGN | Stargates"
@@ -15,25 +13,16 @@ const pb = nuxt.$pb;
 
 const { data: stargates } = useAsyncData('gates-1', () => pb.collection('stargates').getFullList())
 
-const { data: pagedGates } = useAsyncData('paged-gates', () => pb.collection('stargates').getList(0, 8, { requestKey: "pagedgates" }))
-
-async function getGates() {
-  stargates.value = await pb.collection('stargates').getFullList({ requestKey: "admin-full" })
-}
-
-async function changePage(page: number) {
-  pagedGates.value = await pb.collection('stargates').getList(page, 8, { requestKey: "admin-paged" })
-}
-
+const gatePage = ref<number>(0)
+const { data: pagedGates } = useAsyncData('paged-gates', () => pb.collection('stargates').getList(gatePage.value, 8, { requestKey: "pagedgates" }))
 
 // TODO: Figure out some better way to update the list
 pb.collection('stargates').subscribe('*', (v) => {
   refreshNuxtData()
 })
 
-onMounted(() => {
-  getGates()
-  changePage(0)
+watch([gatePage], () => {
+  refreshNuxtData('paged-gates')
 })
 </script>
 
@@ -189,17 +178,17 @@ onMounted(() => {
           <div class="flex gap-2 w-full mt-4 items-center">
             <p class="flex-0 min-w-fit text-neutral-400">{{ pagedGates?.totalItems }} total active gates</p>
             <div class="flex-1" />
-            <Button variant="outline" size="icon" @click="changePage(1)">
+            <Button variant="outline" size="icon" @click="gatePage = 1">
               <Icon name="mdi:chevron-double-left" />
             </Button>
-            <Button variant="outline" size="icon" @click="changePage(pagedGates!.page - 1)">
+            <Button variant="outline" size="icon" @click="gatePage--">
               <Icon name="mdi:chevron-left" />
             </Button>
             <p>{{ pagedGates?.page }}/{{ pagedGates?.totalPages }}</p>
-            <Button variant="outline" size="icon" @click="changePage(pagedGates!.page + 1)">
+            <Button variant="outline" size="icon" @click="gatePage++">
               <Icon name="mdi:chevron-right" />
             </Button>
-            <Button variant="outline" size="icon" @click="changePage(pagedGates!.totalPages)">
+            <Button variant="outline" size="icon" @click="gatePage = pagedGates!.totalPages">
               <Icon name="mdi:chevron-double-right" />
             </Button>
           </div>

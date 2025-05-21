@@ -13,7 +13,7 @@ const pb = nuxt.$pb;
 
 const { data: stargates } = useAsyncData('gates-1', () => pb.collection('stargates').getFullList())
 
-const gatePage = ref<number>(0)
+const gatePage = ref<number>(1)
 const { data: pagedGates } = useAsyncData('paged-gates', () => pb.collection('stargates').getList(gatePage.value, 8, { requestKey: "pagedgates" }))
 
 // TODO: Figure out some better way to update the list
